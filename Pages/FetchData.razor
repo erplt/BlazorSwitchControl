@@ -1,0 +1,49 @@
+﻿@page "/fetchdata"
+@inject HttpClient Http
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (result == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                Result
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    @result
+                </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    private ReturnedValue result;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        result = await Http.GetFromJsonAsync<ReturnedValue>("SetRelayState?code=5BZIml37y1kMS6IWImZQTqgaNvIpPNMshUKfOqTeqAzG8FYPJ1WYcg==&DesiredSwitchState=Off");
+    }
+
+    public class ReturnedValue
+    {
+        public string Value { get; set;}
+        
+        //public DateTime Date { get; set; }
+
+        //public int TemperatureC { get; set; }
+
+        //public string Summary { get; set; }
+
+        //public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+}
