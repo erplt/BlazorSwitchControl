@@ -1,16 +1,28 @@
 ﻿@page "/"
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
+
 
 <h1>Switch control</h1>
 
 <p>Current status: @Status</p>
+<p>
+    API Key: <input @bind="ApiKey" /><button class="btn btn-primary" @onclick="SaveConfig">Save</button>
+</p>
 
+@code {
+    private string currentValue;
+
+    private string CurrentValue { get; set; }
+}
 <button class="btn btn-primary" @onclick="SwitchOn">Switch On</button>
 <button class="btn btn-primary" @onclick="SwitchOff">Switch Off</button>
 
 @code {
     private string Status = "";
+    private string ApiKey { get; set; }
     private ReturnedValue result;
+
     private void SetStatus(string status)
     {
         Status = status;
@@ -18,21 +30,30 @@
 
     private async Task SwitchOn()
     {
-        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-        await Http.GetFromJsonAsync<ReturnedValue>("SetRelayState?code=5BZIml37y1kMS6IWImZQTqgaNvIpPNMshUKfOqTeqAzG8FYPJ1WYcg==&DesiredSwitchState=On");
+        string url = "SetRelayState?code=" + ApiKey + "&DesiredSwitchState=On" ;
+        await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("On");  
     }
 
     private async Task SwitchOff()
     {
-        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-        await Http.GetFromJsonAsync<ReturnedValue>("SetRelayState?code=5BZIml37y1kMS6IWImZQTqgaNvIpPNMshUKfOqTeqAzG8FYPJ1WYcg==&DesiredSwitchState=Off");
+        string url = "SetRelayState?code=" + ApiKey + "&DesiredSwitchState=Off" ;
+        await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("Off");  
     }
 
     public class ReturnedValue
     {
         public string Value { get; set;}
+    }
+
+    private void SaveConfig()
+    {
+        CreateCookie("BlazorSwitchControlConfig", ApiKey, 30);
+    }
+    private async void CreateCookie(string name, string value, int days)
+    {
+        var test = await JSRuntime.InvokeAsync<string>("blazorExtensions.WriteCookie", name, value, days);
     }
 
 }
