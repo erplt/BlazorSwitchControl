@@ -1,5 +1,6 @@
 @page "/config"
-@inject MainLayout.AppState MyAppState
+@inject MainLayout.AppState AppState
+@inject IJSRuntime JSRuntime
 
 <h1>Switch control</h1>
 
@@ -9,10 +10,22 @@
 
 @code {
     private string NewApiKey;
+    public MainLayout.AppState MyAppState = MainLayout.AppState.GetInstance();
 
     void SaveKey()
     {
-        MyAppState.SaveConfig(NewApiKey);
+        SaveConfig(NewApiKey);
+        MainLayout.AppState.ApiKey = NewApiKey;
+    }
+
+    public void SaveConfig(string NewApiKey)
+    {
+        CreateCookie(MainLayout.AppState.CookieName, NewApiKey, 30);
+    }
+
+    private async void CreateCookie(string name, string value, int days)
+    {
+        await JSRuntime.InvokeAsync<string>("blazorExtensions.WriteCookie", name, value, days);
     }
 
 
