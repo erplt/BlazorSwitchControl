@@ -1,0 +1,19 @@
+@page "/config"
+@inject MainLayout.AppState MyAppState
+
+<h1>Switch control</h1>
+
+    <p>Current Key value: @MyAppState.GetApiKey()</p>
+    Enter New Api Key: <input @bind="NewApiKey" />
+    <button class="btn btn-primary" @onclick="SaveKey">Save</button>
+
+@code {
+    private string NewApiKey;
+
+    void SaveKey()
+    {
+        MyAppState.SaveConfig(NewApiKey);
+    }
+
+
+}

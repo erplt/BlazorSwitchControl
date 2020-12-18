@@ -7,18 +7,17 @@
 
 <p>Current status: @Status</p>
 <p>
-    API Key: <input @bind="ApiKey" /><button class="btn btn-primary" @onclick="SaveConfig">Save</button>
+
 </p>
 
-@code {
-    private string currentValue;
-
-    private string CurrentValue { get; set; }
-}
 <button class="btn btn-primary" @onclick="SwitchOn">Switch On</button>
 <button class="btn btn-primary" @onclick="SwitchOff">Switch Off</button>
 
 @code {
+    private string currentValue;
+    private string CurrentValue { get; set; }
+
+
     private string Status = "";
     private string ApiKey { get; set; }
     private ReturnedValue result;
@@ -47,13 +46,20 @@
         public string Value { get; set;}
     }
 
-    private void SaveConfig()
+
+    private async Task LoadConfig()
     {
-        CreateCookie("BlazorSwitchControlConfig", ApiKey, 30);
+        ApiKey = await ReadCookie("BlazorSwitchControlConfig");
     }
-    private async void CreateCookie(string name, string value, int days)
+    private async Task<string> ReadCookie(string name)
     {
-        var test = await JSRuntime.InvokeAsync<string>("blazorExtensions.WriteCookie", name, value, days);
+        var value = (string)(await JSRuntime.InvokeAsync<string>("blazorExtensions.ReadCookie", name));
+        return value;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadConfig();
     }
 
 }
