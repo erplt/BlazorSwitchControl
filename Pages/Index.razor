@@ -7,7 +7,9 @@
 <h1>Switch control</h1>
 
 
-<p>Current status: @Status</p>
+<p>Current config status: @ConfigStatus</p>
+
+<p>Current switch status: @Status</p>
 <p>
 
 </p>
@@ -21,8 +23,49 @@
 
 
     private string Status = "";
-    private string ApiKey { get; set; }
+    private string ConfigStatus = "";
     private ReturnedValue result;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() => LoadConfig());
+    }
+
+    public async Task LoadConfig()
+    {
+        string SavedApiKey = AppState.ApiKey;
+        Console.WriteLine("Config loaded from App State");
+        if (String.IsNullOrEmpty(SavedApiKey))
+        {
+            Console.WriteLine("Current key is empty, attempting to read from cookie");
+            SavedApiKey = await ReadCookie(AppState.CookieName);
+            Console.WriteLine("Cookie read successfully, value = " + SavedApiKey);
+            AppState.ApiKey = SavedApiKey;
+            Console.WriteLine("Saved value to App State");
+        }
+
+        string ApiKey = AppState.ApiKey;
+        Console.WriteLine("Api Key from AppState: " + ApiKey);
+        //if (String.IsNullOrEmpty(ApiKey))
+        if (ApiKey == "null")
+        {
+            Console.WriteLine("No Api Key could be retrieved, updating information message");
+            ConfigStatus = "Config not ready, please set ApiKey in Configuration tab";
+        } else {
+            Console.WriteLine("Api Key could be retrieved from configuration, updating information message");
+            ConfigStatus = "Config Ok";
+        }
+        
+        Console.WriteLine("Updated display");
+
+        return;
+    }
+    private async Task<string> ReadCookie(string _CookieName)
+    {
+        Console.WriteLine("Cookie Name: " + _CookieName);
+        return (string)(await JSRuntime.InvokeAsync<string>("blazorExtensions.ReadCookie", _CookieName));
+    }
 
     private void SetStatus(string status)
     {
@@ -47,5 +90,4 @@
     {
         public string Value { get; set;}
     }
-
 }
