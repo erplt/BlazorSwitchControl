@@ -1,9 +1,11 @@
 ﻿@page "/"
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
+@inject Services.AppState AppState
 
 
 <h1>Switch control</h1>
+
 
 <p>Current status: @Status</p>
 <p>
@@ -29,14 +31,14 @@
 
     private async Task SwitchOn()
     {
-        string url = "SetRelayState?code=" + ApiKey + "&DesiredSwitchState=On" ;
+        string url = "SetRelayState?code=" + AppState.ApiKey + "&DesiredSwitchState=On" ;
         await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("On");  
     }
 
     private async Task SwitchOff()
     {
-        string url = "SetRelayState?code=" + ApiKey + "&DesiredSwitchState=Off" ;
+        string url = "SetRelayState?code=" + AppState.ApiKey + "&DesiredSwitchState=Off" ;
         await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("Off");  
     }
@@ -44,22 +46,6 @@
     public class ReturnedValue
     {
         public string Value { get; set;}
-    }
-
-
-    private async Task LoadConfig()
-    {
-        ApiKey = await ReadCookie("BlazorSwitchControlConfig");
-    }
-    private async Task<string> ReadCookie(string name)
-    {
-        var value = (string)(await JSRuntime.InvokeAsync<string>("blazorExtensions.ReadCookie", name));
-        return value;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadConfig();
     }
 
 }

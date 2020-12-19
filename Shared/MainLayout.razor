@@ -22,7 +22,7 @@
     protected override async Task OnInitializedAsync()
     {
         string Key = await LoadConfig(AppState.CookieName);
-
+        Console.WriteLine("Key loaded from config:" + Key);
     }
     
     public class AppState

@@ -1,0 +1,59 @@
+   
+@inject Services.AppState AppState
+@inject IJSRuntime JSRuntime
+
+
+    <p>Current Key value: @CurrentApiKey</p>
+    Enter New Api Key: <input @bind="NewApiKey" />
+    <button class="btn btn-primary" @onclick="SaveConfig">Save</button>
+    <button class="btn btn-primary" @onclick="LoadConfig">Load</button>
+
+    @code {
+        private string CurrentApiKey;
+        private string NewApiKey;
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            await Task.Run(() => LoadConfig());
+        }
+
+        public void SaveConfig()
+        {
+            CreateCookie(AppState.CookieName, NewApiKey, 30);
+            Console.WriteLine("Key value saved to cookie");
+            AppState.ApiKey = NewApiKey;
+            Console.WriteLine("Key saved to AppState");
+            CurrentApiKey = AppState.ApiKey;
+            Console.WriteLine("pdated display");
+
+        }
+
+        private async void CreateCookie(string name, string value, int days)
+        {
+            await JSRuntime.InvokeAsync<string>("blazorExtensions.WriteCookie", name, value, days);
+        }
+        public async Task LoadConfig()
+        {
+            string SavedApiKey = AppState.ApiKey;
+            Console.WriteLine("Config loaded from App State");
+            if (String.IsNullOrEmpty(SavedApiKey))
+            {
+                Console.WriteLine("Current key is empty, attempting to read from cookie");
+                SavedApiKey = await ReadCookie(AppState.CookieName);
+                Console.WriteLine("Cookie read successfully, value = " + SavedApiKey);
+                AppState.ApiKey = SavedApiKey;
+                Console.WriteLine("Saved value to App State");
+            }
+            CurrentApiKey = AppState.ApiKey;
+            Console.WriteLine("Updated display");
+
+            return;
+        }
+        private async Task<string> ReadCookie(string _CookieName)
+        {
+            Console.WriteLine("Cookie Name: " + _CookieName);
+            return (string)(await JSRuntime.InvokeAsync<string>("blazorExtensions.ReadCookie", _CookieName));
+        }
+
+    }

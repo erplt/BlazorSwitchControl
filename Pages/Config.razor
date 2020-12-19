@@ -1,32 +1,9 @@
 @page "/config"
-@inject MainLayout.AppState AppState
-@inject IJSRuntime JSRuntime
 
-<h1>Switch control</h1>
+<h1>App Configuration</h1>
 
-    <p>Current Key value: @MyAppState.GetApiKey()</p>
-    Enter New Api Key: <input @bind="NewApiKey" />
-    <button class="btn btn-primary" @onclick="SaveKey">Save</button>
+<InputApiKey />
 
 @code {
-    private string NewApiKey;
-    public MainLayout.AppState MyAppState = MainLayout.AppState.GetInstance();
-
-    void SaveKey()
-    {
-        SaveConfig(NewApiKey);
-        MainLayout.AppState.ApiKey = NewApiKey;
-    }
-
-    public void SaveConfig(string NewApiKey)
-    {
-        CreateCookie(MainLayout.AppState.CookieName, NewApiKey, 30);
-    }
-
-    private async void CreateCookie(string name, string value, int days)
-    {
-        await JSRuntime.InvokeAsync<string>("blazorExtensions.WriteCookie", name, value, days);
-    }
-
 
 }
