@@ -74,14 +74,14 @@
 
     private async Task SwitchOn()
     {
-        string url = "SetRelayState?code=" + AppState.ApiKey + "&DesiredSwitchState=On" ;
+        string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=On" ;
         await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("On");  
     }
 
     private async Task SwitchOff()
     {
-        string url = "SetRelayState?code=" + AppState.ApiKey + "&DesiredSwitchState=Off" ;
+        string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=Off" ;
         await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("Off");  
     }
