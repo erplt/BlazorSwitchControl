@@ -10,12 +10,15 @@
 <p>Current config status: @ConfigStatus</p>
 
 <p>Current switch status: @Status</p>
-<p>
-
-</p>
-
+<p>Sphere</p>
 <button class="btn btn-primary" @onclick="SwitchOn">Switch On</button>
 <button class="btn btn-primary" @onclick="SwitchOff">Switch Off</button>
+
+<p>MXChip</p>
+
+<button class="btn btn-primary" @onclick="MXChipOn">Switch On</button>
+<button class="btn btn-primary" @onclick="MXChipOff">Switch Off</button>
+</p>
 
 @code {
     private string currentValue;
@@ -82,6 +85,20 @@
     private async Task SwitchOff()
     {
         string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=Off" ;
+        await Http.GetFromJsonAsync<ReturnedValue>(url);
+        SetStatus("Off");  
+    }
+
+    private async Task MXChipOn()
+    {
+        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=On&DeviceId=mxchip1" ;
+        await Http.GetFromJsonAsync<ReturnedValue>(url);
+        SetStatus("On");  
+    }
+
+    private async Task MXChipOff()
+    {
+        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=Off&DeviceId=mxchip1" ;
         await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("Off");  
     }
