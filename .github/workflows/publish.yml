@@ -13,6 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+  - uses: actions/setup-dotnet@v1
+    with:
+      dotnet-version: '6.0.1'
+      # include-prerelease: true
+
     - name: Publish app
       run: dotnet publish -c Release -f net6.0
       # You can use cd before if your project is in a subfolder
