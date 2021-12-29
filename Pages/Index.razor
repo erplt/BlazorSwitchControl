@@ -56,11 +56,13 @@
         {
             Console.WriteLine("No Api Key could be retrieved, updating information message");
             ConfigStatus = "Config not ready, please set ApiKey in Configuration tab";
-        } else {
+        }
+        else
+        {
             Console.WriteLine("Api Key could be retrieved from configuration, updating information message");
             ConfigStatus = "Config Ok";
         }
-        
+
         Console.WriteLine("Updated display");
 
         return;
@@ -73,39 +75,39 @@
 
     private void SetStatus(string status)
     {
-        Status = status;
+        Status = status.ToString();
     }
 
     private async Task SwitchOn()
     {
-        string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=On" ;
+        string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=On";
         await Http.GetFromJsonAsync<ReturnedValue>(url);
-        SetStatus("On");  
+        SetStatus("On");
     }
 
     private async Task SwitchOff()
     {
-        string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=Off" ;
+        string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=Off";
         await Http.GetFromJsonAsync<ReturnedValue>(url);
-        SetStatus("Off");  
+        SetStatus("Off");
     }
 
     private async Task MXChipOn()
     {
-        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=On&DeviceId=mxchip1" ;
+        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=On&DeviceId=mxchip1";
         await Http.GetFromJsonAsync<ReturnedValue>(url);
-        SetStatus("On");  
+        SetStatus("On");
     }
 
     private async Task MXChipOff()
     {
-        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=Off&DeviceId=mxchip1" ;
+        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=Off&DeviceId=mxchip1";
         await Http.GetFromJsonAsync<ReturnedValue>(url);
-        SetStatus("Off");  
+        SetStatus("Off");
     }
 
     public class ReturnedValue
     {
-        public object Value { get; set;}
+        public HashSet<string> Value { get; set; }
     }
 }
