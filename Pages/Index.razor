@@ -11,14 +11,22 @@
 
 <p>Current switch status: @Status</p>
 <br>
+<br>
 <p>Guirlande</p>
 <button class="btn btn-primary" @onclick="SwitchOn">Switch On</button>
 <button class="btn btn-primary" @onclick="SwitchOff">Switch Off</button>
 <br>
+<br>
 <p>Sapin</p>
 
-<button class="btn btn-primary" @onclick="MXChipOn">Switch On</button>
-<button class="btn btn-primary" @onclick="MXChipOff">Switch Off</button>
+<button class="btn btn-primary" @onclick="(() => MXChipOn('mxchip1'))">Switch On</button>
+<button class="btn btn-primary" @onclick="(() => MXChipOff('mxchip1'))">Switch Off</button>
+<br>
+<br>
+<p>Test</p>
+
+<button class="btn btn-primary" @onclick="(() => MXChipOn('mxchip2'))">Switch On</button>
+<button class="btn btn-primary" @onclick="(() => MXChipOff('mxchip2'))">Switch Off</button>
 
 
 @code {
@@ -92,16 +100,16 @@
         SetStatus("Off");
     }
 
-    private async Task MXChipOn()
+    private async Task MXChipOn(string deviceId)
     {
-        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=On&DeviceId=mxchip1";
+        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=On&DeviceId=" + deviceId;
         await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("On");
     }
 
-    private async Task MXChipOff()
+    private async Task MXChipOff(string deviceId)
     {
-        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=Off&DeviceId=mxchip1";
+        string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=Off&DeviceId=" + deviceId;
         await Http.GetFromJsonAsync<ReturnedValue>(url);
         SetStatus("Off");
     }
