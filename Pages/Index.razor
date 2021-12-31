@@ -89,34 +89,52 @@
     private async Task SwitchOn()
     {
         string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=On";
-        await Http.GetFromJsonAsync<ReturnedValue>(url);
-        SetStatus("On");
+        var response = await Http.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+        SetStatus(json);
+        
+        //await Http.GetFromJsonAsync<ReturnedValue>(url);
+        //SetStatus("On");
     }
 
     private async Task SwitchOff()
     {
         string url = "RelayControl?code=" + AppState.ApiKey + "&SetSwitch=Off";
-        await Http.GetFromJsonAsync<ReturnedValue>(url);
-        SetStatus("Off");
+        var response = await Http.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+        SetStatus(json);
+        //await Http.GetFromJsonAsync<ReturnedValue>(url);
+        //SetStatus("Off");
     }
 
     private async Task MXChipOn(string deviceId)
     {
         string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=On&DeviceId=" + deviceId;
-        await Http.GetFromJsonAsync<ReturnedValue>(url);
-        SetStatus("On");
+        var response = await Http.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+        SetStatus(json);
+        //await Http.GetFromJsonAsync<ReturnedValue>(url);
+        //SetStatus("On");
     }
 
     private async Task MXChipOff(string deviceId)
     {
         string url = "mxchip1control?code=" + AppState.ApiKey + "&SetSwitch=Off&DeviceId=" + deviceId;
-        await Http.GetFromJsonAsync<ReturnedValue>(url);
-        SetStatus("Off");
+        var response = await Http.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+        SetStatus(json);
+        
+        //await Http.GetFromJsonAsync<ReturnedValue>(url);
+        //SetStatus("Off");
     }
 
     public class ReturnedValue
     {
-        public String DesiredRelayState { get; set; }
+        public string DesiredRelayState { get; set; }
         public Boolean ReportedRelayState { get; set; }
 
     }
