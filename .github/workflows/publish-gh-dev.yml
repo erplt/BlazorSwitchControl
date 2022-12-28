@@ -2,7 +2,8 @@ name: DeployToGitHubPages
 env:
   PUBLISH_DIR: bin/Release/net6.0/publish/wwwroot
   # Include subfolders if needed
-  GH_PAGES_DEV_REPO: demo-az/special-couscous
+  GH_PAGES_DEV_ORG: demo-az
+  GH_PAGES_DEV_REPO: special-couscous
 
 on:
   push:
@@ -28,13 +29,13 @@ jobs:
       uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
       with:
         html_path: ${{ env.PUBLISH_DIR }}/index.html
-        base_href: /BlazorSwitchControl/
+        base_href: /${{ env.GH_PAGES_DEV_REPO }}/
 
     - name: GitHub Pages
       if: success()
       uses: crazy-max/ghaction-github-pages@v3
       with:
-        repo: ${{ env.GH_PAGES_DEV_REPO }}
+        repo: ${{ env.GH_PAGES_DEV_ORG }}/${{ env.GH_PAGES_DEV_REPO }}
         target_branch: gh-pages
         build_dir: ${{ env.PUBLISH_DIR }}
       env:
