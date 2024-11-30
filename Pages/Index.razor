@@ -12,28 +12,28 @@
 <p>Current switch status: @Status</p>
 <br>
 <br>
-<p>Guirlande</p>
+<!-- <p>Guirlande</p>
 <button class="btn btn-primary" @onclick="SwitchOn">Switch On</button>
 <button class="btn btn-primary" @onclick="SwitchOff">Switch Off</button>
 <br>
-<br>
+<br> -->
 <p>Sapin</p>
+
+<button class="btn btn-primary" @onclick='(() => MXChipOn("mxchip3"))'>Switch On</button>
+<button class="btn btn-primary" @onclick='(() => MXChipOff("mxchip3"))'>Switch Off</button>
+<br>
+<br>
+<p>Guirlande</p>
 
 <button class="btn btn-primary" @onclick='(() => MXChipOn("mxchip1"))'>Switch On</button>
 <button class="btn btn-primary" @onclick='(() => MXChipOff("mxchip1"))'>Switch Off</button>
-<br>
-<br>
-<p>Master device</p>
 
-<button class="btn btn-primary" @onclick='(() => MXChipOn("mxchip2"))'>Switch On</button>
-<button class="btn btn-primary" @onclick='(() => MXChipOff("mxchip2"))'>Switch Off</button>
-
-<br>
+<!-- <br>
 <br>
 <p>Slave device</p>
 
 <button class="btn btn-primary" @onclick='(() => MXChipOn("mxchip3"))'>Switch On</button>
-<button class="btn btn-primary" @onclick='(() => MXChipOff("mxchip3"))'>Switch Off</button>
+<button class="btn btn-primary" @onclick='(() => MXChipOff("mxchip3"))'>Switch Off</button> -->
 
 
 @code {
